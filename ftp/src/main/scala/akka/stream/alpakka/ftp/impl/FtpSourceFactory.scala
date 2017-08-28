@@ -19,6 +19,8 @@ private[ftp] trait FtpSourceFactory[FtpClient] { self =>
 
   protected[this] def ftpBrowserSourceName: String
 
+  protected[this] def ftpListingSourceName: String
+
   protected[this] def ftpIOSourceName: String
 
   protected[this] def ftpIOSinkName: String
@@ -29,6 +31,18 @@ private[ftp] trait FtpSourceFactory[FtpClient] { self =>
   )(implicit _ftpLike: FtpLike[FtpClient, S]): FtpBrowserGraphStage[FtpClient, S] =
     new FtpBrowserGraphStage[FtpClient, S] {
       lazy val name: String = ftpBrowserSourceName
+      val basePath: String = _basePath
+      val connectionSettings: S = _connectionSettings
+      val ftpClient: () => FtpClient = self.ftpClient
+      val ftpLike: FtpLike[FtpClient, S] = _ftpLike
+    }
+
+  protected[this] def createListingGraph(
+      _basePath: String,
+      _connectionSettings: S
+  )(implicit _ftpLike: FtpLike[FtpClient, S]): FtpListingGraphStage[FtpClient, S] =
+    new FtpListingGraphStage[FtpClient, S] {
+      lazy val name: String = ftpListingSourceName
       val basePath: String = _basePath
       val connectionSettings: S = _connectionSettings
       val ftpClient: () => FtpClient = self.ftpClient
@@ -72,30 +86,36 @@ private[ftp] trait FtpSourceFactory[FtpClient] { self =>
 
 private[ftp] trait FtpSource extends FtpSourceFactory[FTPClient] {
   protected final val FtpBrowserSourceName = "FtpBrowserSource"
+  protected final val FtpListingSourceName = "FtpListingSource"
   protected final val FtpIOSourceName = "FtpIOSource"
   protected final val FtpIOSinkName = "FtpIOSink"
   protected val ftpClient: () => FTPClient = () => new FTPClient
   protected val ftpBrowserSourceName: String = FtpBrowserSourceName
+  protected val ftpListingSourceName: String = FtpListingSourceName
   protected val ftpIOSourceName: String = FtpIOSourceName
   protected val ftpIOSinkName: String = FtpIOSinkName
 }
 
 private[ftp] trait FtpsSource extends FtpSourceFactory[FTPClient] {
   protected final val FtpsBrowserSourceName = "FtpsBrowserSource"
+  protected final val FtpListingSourceName = "FtpListingSource"
   protected final val FtpsIOSourceName = "FtpsIOSource"
   protected final val FtpsIOSinkName = "FtpsIOSink"
   protected val ftpClient: () => FTPClient = () => new FTPClient
   protected val ftpBrowserSourceName: String = FtpsBrowserSourceName
+  protected val ftpListingSourceName: String = FtpListingSourceName
   protected val ftpIOSourceName: String = FtpsIOSourceName
   protected val ftpIOSinkName: String = FtpsIOSinkName
 }
 
 private[ftp] trait SftpSource extends FtpSourceFactory[SSHClient] {
   protected final val sFtpBrowserSourceName = "sFtpBrowserSource"
+  protected final val sFtpListingSourceName = "sFtpListingSource" // not used
   protected final val sFtpIOSourceName = "sFtpIOSource"
   protected final val sFtpIOSinkName = "sFtpIOSink"
   protected val ftpClient: () => SSHClient = () => new SSHClient
   protected val ftpBrowserSourceName: String = sFtpBrowserSourceName
+  protected val ftpListingSourceName: String = sFtpListingSourceName
   protected val ftpIOSourceName: String = sFtpIOSourceName
   protected val ftpIOSinkName: String = sFtpIOSinkName
 }
