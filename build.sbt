@@ -1,6 +1,6 @@
 lazy val alpakka = project
   .in(file("."))
-  .enablePlugins(PublishUnidoc)
+//  .enablePlugins(PublishUnidoc)
   .aggregate(amqp,
              awslambda,
              azureStorageQueue,
