@@ -137,12 +137,7 @@ private[ftp] trait FtpListingGraphStage[FtpClient, S <: RemoteFileSettings] exte
       private[this] def initBuffer(basePath: String) =
         getFilesFromPath(basePath)
 
-      private[this] def fillBuffer(): Unit = buffer match {
-        case head +: tail if head.isDirectory => {
-          buffer = getFilesFromPath(head.path)
-        }
-        case _ => // do nothing
-      }
+      private[this] def fillBuffer(): Unit = ()
 
       private[this] def getFilesFromPath(basePath: String) =
         if (basePath.isEmpty)
