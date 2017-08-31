@@ -75,6 +75,16 @@ sealed trait FtpApi[FtpClient] { _: FtpSourceFactory[FtpClient] =>
     Source.fromGraph(createBrowserGraph(basePath, connectionSettings))
 
   /**
+   * Scala API: creates a [[Source]] of [[FtpFile]]s from a base path.
+   *
+   * @param basePath Base path from which traverse the remote file server
+   * @param connectionSettings connection settings
+   * @return A [[Source]] of [[FtpFile]]s
+   */
+  def lsFlat(basePath: String, connectionSettings: S): Source[FtpFile, NotUsed] =
+    Source.fromGraph(createListingGraph(basePath, connectionSettings))
+
+  /**
    * Scala API: creates a [[Source]] of [[ByteString]] from some file path.
    *
    * @param host FTP, FTPs or SFTP host
