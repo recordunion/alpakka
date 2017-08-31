@@ -1,6 +1,6 @@
 lazy val alpakka = project
   .in(file("."))
-//  .enablePlugins(PublishUnidoc)
+  .enablePlugins(PublishUnidoc)
   .aggregate(amqp,
              awslambda,
              azureStorageQueue,
@@ -236,19 +236,19 @@ val defaultParadoxSettings: Seq[Setting[_]] = Seq(
   sourceDirectory := baseDirectory.value / "src" / "main"
 )
 
-//lazy val docs = project
-//  .enablePlugins(ParadoxPlugin, NoPublish)
-//  .disablePlugins(BintrayPlugin)
-//  .settings(
-//    name := "Alpakka",
-//    inConfig(Compile)(defaultParadoxSettings),
-//    ParadoxPlugin.paradoxSettings(Local),
-//    inConfig(Local)(defaultParadoxSettings),
-//    paradoxProperties in Local ++= Map(
-//      // point API doc links to locally generated API docs
-//      "scaladoc.akka.stream.alpakka.base_url" -> rebase(
-//        (baseDirectory in alpakka).value,
-//        "../../../../../"
-//      )((sbtunidoc.Plugin.UnidocKeys.unidoc in alpakka in Compile).value.head).get
-//    )
-//  )
+lazy val docs = project
+  .enablePlugins(ParadoxPlugin, NoPublish)
+  .disablePlugins(BintrayPlugin)
+  .settings(
+    name := "Alpakka",
+    inConfig(Compile)(defaultParadoxSettings),
+    ParadoxPlugin.paradoxSettings(Local),
+    inConfig(Local)(defaultParadoxSettings),
+    paradoxProperties in Local ++= Map(
+      // point API doc links to locally generated API docs
+      "scaladoc.akka.stream.alpakka.base_url" -> rebase(
+        (baseDirectory in alpakka).value,
+        "../../../../../"
+      )((sbtunidoc.Plugin.UnidocKeys.unidoc in alpakka in Compile).value.head).get
+    )
+  )
