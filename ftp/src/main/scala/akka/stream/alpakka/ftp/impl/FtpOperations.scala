@@ -5,7 +5,7 @@
 package akka.stream.alpakka.ftp
 package impl
 
-import org.apache.commons.net.ftp.{FTP, FTPClient, FTPFile}
+import org.apache.commons.net.ftp.{FTP, FTPClient, FTPClientConfig, FTPFile}
 import scala.collection.immutable
 import scala.util.Try
 import java.io.{IOException, InputStream, OutputStream}
@@ -17,6 +17,10 @@ private[ftp] trait FtpOperations { _: FtpLike[FTPClient, FtpFileSettings] =>
   type Handler = FTPClient
 
   def connect(connectionSettings: FtpFileSettings)(implicit ftpClient: FTPClient): Try[Handler] = Try {
+    FTPClientConfig config = new FTPClientConfig();
+    config.setServerTimeZoneId("UTC") // ! 
+    ftpClient.configure(config );
+
     ftpClient.connect(connectionSettings.host, connectionSettings.port)
     ftpClient.login(
       connectionSettings.credentials.username,
