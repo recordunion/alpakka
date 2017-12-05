@@ -17,9 +17,8 @@ private[ftp] trait FtpOperations { _: FtpLike[FTPClient, FtpFileSettings] =>
   type Handler = FTPClient
 
   def connect(connectionSettings: FtpFileSettings)(implicit ftpClient: FTPClient): Try[Handler] = Try {
-    FTPClientConfig config = new FTPClientConfig();
-    config.setServerTimeZoneId("UTC") // ! 
-    ftpClient.configure(config );
+    val config = new FTPClientConfig()
+    ftpClient.configure(config.setServerTimeZoneId("UTC"))
 
     ftpClient.connect(connectionSettings.host, connectionSettings.port)
     ftpClient.login(
