@@ -1,7 +1,7 @@
 import sbt._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
-import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
+//import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 import de.heikoseeberger.sbtheader._
 import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport._
 import sbtunidoc.BaseUnidocPlugin.autoImport._
@@ -49,7 +49,7 @@ object Common extends AutoPlugin {
     // This should not impact the total test time as we don't expect to hit this
     // timeout.
     testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-F", "4"),
-    scalafmtOnCompile := true,
+    //scalafmtOnCompile := true,
     headerLicense := Some(HeaderLicense.Custom("Copyright (C) 2016-2017 Lightbend Inc. <http://www.lightbend.com>"))
   )
 }
